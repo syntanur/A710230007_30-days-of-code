@@ -19,3 +19,4 @@ orang2 = Orang("Jane", "sushi", "teh", "membaca")
 orang1.perkenalan()
 print()  # Spasi antara perkenalan orang1 dan orang2
 orang2.perkenalan()
+
