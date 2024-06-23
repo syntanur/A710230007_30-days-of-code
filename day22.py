@@ -1,57 +1,39 @@
 import sys
-from PyQt5.QtCore import QTimer, QTime, Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QLCDNumber
-from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication, QWidget, QLCDNumber
+from PyQt5.QtCore import QTimer, QTime
+from PyQt5.QtGui import QFont  # Import QFont untuk mengatur jenis font
 
-
-class Clock(QWidget):
-    def init(self):
-        super().init()
-
-        self.setWindowTitle("Jam dunia")
-        self.setGeometry(100, 100, 300, 200)
-
-        # Membuat LCD Number untuk menampilkan jam
+class DigitalClock(QWidget):
+    def _init_(self):
+        super()._init_()
+        
+        self.setWindowTitle('Digital Clock')
+        self.setGeometry(200, 200, 300, 100)
+        
+        self.initUI()
+        
+    def initUI(self):
         self.lcd = QLCDNumber(self)
-        self.lcd.setSegmentStyle(QLCDNumber.Flat)
-        self.lcd.setDigitCount(8)
-        self.lcd.setStyleSheet("background-color: black; color: white;")
-        self.lcd.setFont(QFont("Arial", 18))
+        self.lcd.setDigitCount(8)  # Menampilkan format HH:MM:SS
+        self.lcd.resize(250, 100)
+        
+        # Mengatur jenis font menjadi Arial dengan ukuran 48
+        font = QFont("Arial", 48, QFont.Bold)
+        self.lcd.setFont(font)
+        
+        timer = QTimer(self)
+        timer.timeout.connect(self.updateTime)
+        timer.start(1000)  # Memperbarui setiap 1000 ms (1 detik)
+        
+        self.updateTime()  # Memastikan waktu ditampilkan saat aplikasi dimulai
+        
+    def updateTime(self):
+        currentTime = QTime.currentTime()
+        displayText = currentTime.toString('hh:mm:ss')
+        self.lcd.display(displayText)
 
-        # Membuat label untuk menampilkan tanggal dan zona waktu
-        self.date_label = QLabel("Jum, 7 Jun", self)
-        self.date_label.setStyleSheet("color: white;")
-        self.date_label.setFont(QFont("Arial", 12))
-        self.time_label = QLabel("Waktu Indonesia Barat", self)
-        self.time_label.setStyleSheet("color: white;")
-        self.time_label.setFont(QFont("Arial", 10))
-
-        # Menata layout
-        layout = QVBoxLayout()
-        layout.addWidget(self.lcd)
-        layout.addWidget(self.date_label)
-        layout.addWidget(self.time_label)
-        self.setLayout(layout)
-
-        # Timer untuk memperbarui waktu setiap detik
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_time)
-        self.timer.start(1000)
-
-        self.update_time()
-
-    def update_time(self):
-        # Mendapatkan waktu saat ini
-        current_time = QTime.currentTime()
-        time_text = current_time.toString("hh:mm:ss")
-
-        # Mengatur teks LCD Number dan label tanggal
-        self.lcd.display(time_text)
-        self.date_label.setText("Jum, 7 Jun")
-
-
-if name == "main":
+if __name__ == '_main_':
     app = QApplication(sys.argv)
-    clock = Clock()
+    clock = DigitalClock()
     clock.show()
     sys.exit(app.exec_())
