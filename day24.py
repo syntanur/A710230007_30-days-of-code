@@ -39,7 +39,7 @@ class InfoWidget(QWidget):
         self.label_nim.setText(f'NIM: {nim}')
         self.label_univ.setText(f'Universitas: {universitas}')
 
-if name == 'main':
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = InfoWidget()
     window.show()
